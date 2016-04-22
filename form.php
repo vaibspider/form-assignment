@@ -78,7 +78,6 @@ function validate_form_data() {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	echo "form submitted";
 	
 	validate_form_data();
 	

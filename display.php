@@ -5,6 +5,7 @@
 	</head>
 <body>
 <?php
+	# Set this debug to 1 if you want to see debugging output on the browser screen. Else reset it to 0.
 	$debug = 0;
 	# Inserting the input data into a table using mysql
 		$database = "sample0";
