@@ -7,8 +7,8 @@
 <body>
 <?php
 #session_start();
-$name = $mis = $branch = "";
-$nameError = $misError = $branchError = "";
+$name = $mis = $branch = $phone = "";
+$nameError = $misError = $branchError = $phoneError = "";
 
 # Flags
 $error = 0;  ### This flag will be set to '1' even if a single error occurs. It will remain '0' only if no errors are present in the input.
@@ -21,7 +21,7 @@ function check_for_hack($info) {
 }
 
 function validate_form_data() {
-	global $name, $mis, $branch, $error, $debug, $nameError, $misError, $branchError;
+	global $name, $mis, $branch, $phone, $error, $debug, $nameError, $misError, $branchError, $phoneError;
 	if(empty($_POST['name'])) {
 		$nameError = "Name is required";
 		$error = 1;
@@ -75,6 +75,25 @@ function validate_form_data() {
 			}
 		}
 	}
+
+	
+	if(empty($_POST['phone'])) {
+		$phoneError = "phone is required";
+		$error = 1;
+	}
+	else {
+		$phone= check_for_hack($_POST['phone']);
+		if(!preg_match("/^[0-9]*$/", $phone)) {
+			$phoneError = "Only digits [0-9] are allowed";
+			$error = 1;
+		}
+		else {
+			if(strlen($phone) != 9) {
+				$phoneError = "phone must be of 9 digits";
+				$error = 1;
+			}
+		}
+	}
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -87,6 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo "Name: $name<br>";
                         echo "MIS: $mis <br>";
                         echo "Branch: $branch<br>";
+			echo "Phone: $phone<br>";
                 }
 		
 		# Inserting the input data into a table using mysql
@@ -217,6 +237,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	<span class="error">* <?php echo $branchError;?> </span>
 	<br><br>
 
+	Phone:
+	<input type="text" name="phone" value="<?php echo $phone; ?>">
+	<span class="error">* <?php echo $phoneError;?> </span>
+	<br><br>
+	
 	<input type="submit" name="submit_button" value="Submit">
 	<br><br>
 </form>
